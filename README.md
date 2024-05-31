@@ -1,5 +1,11 @@
 ### Group Members:
 - Moez Khan
+- Aliseena Ahmar
+- Einstien Augistine
+### Responsibilities:
+- **Frontend:** Moez
+- **Backend:** Aliseena, Moez
+- **Readme, about.html, Video Demo:** Einsten
 
 
 ### Project Description:
