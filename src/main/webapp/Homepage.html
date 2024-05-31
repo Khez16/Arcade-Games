@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HomePage</title>
+    <link href="https://fonts.cdnfonts.com/css/arcade-classic" rel="stylesheet">
+    <link rel="stylesheet" href="css/Homepage.css">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/arcade-classic');
+    </style>
+</head>
+<body>
+<audio src="/Audio/ArcadeMusic.mp3" autoplay></audio>
+<div id="BackgroundImage"></div>
+<div class="Container">
+    <div class="UP">
+        <h5>1UP</h5>
+        <h6>2UP</h6>
+    </div>
+    <div class="HighScore">
+        <h3>HI-SCORE</h3>
+        <h4>00246</h4>
+    </div>
+    <div class="Title">
+        <h1>Arcade Games</h1>
+    </div>
+    <div class="PlayerOption">
+        <a href="Computer.html">
+            <button type="button" class="ChooseComputer" onclick="setPlayer('Computer')">Computer</button>
+        </a>
+        <button type="button" class="ChoosePlayer1" onclick="setPlayer('Player1')">Player 1</button>
+        <button type="button" class="ChoosePlayer2" onclick="setPlayer('Player2')">Player 2</button>
+        <a href="About.html">
+            <button  type="button" class="AboutPage">About</button>
+        </a>
+    </div>
+    <div class="Credits">
+        <h2>Credit 20</h2>
+    </div>
+</div>
+
+<script>
+    function setPlayer(player) {
+        document.cookie = `player=${player}`;
+        window.location.href = 'RockPaperScissor.html';
+    }
+</script>
+
+</body>
+</html>

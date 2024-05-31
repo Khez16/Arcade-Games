@@ -1,0 +1,201 @@
+// Get DOM elements
+const player1ScoreDisplay = document.querySelector('.Player1 .Score');
+const player2ScoreDisplay = document.querySelector('.Player2 .Score');
+const turnDisplay = document.querySelector('.Turn');
+const rockButton = document.querySelector('.Rock');
+const paperButton = document.querySelector('.Paper');
+const scissorButton = document.querySelector('.Scissor');
+const winnerAnnouncement = document.querySelector('.WinnerAnnouncement');
+const player2ChoiceDisplay = document.querySelector('.Player2Choice');
+const chatInput = document.querySelector('.ChatInput');
+const chatMessages = document.querySelector('.ChatMessages');
+const imageContainer = document.getElementById('imageContainer');
+
+// Initialize scores
+let player1Score = 0;
+let player2Score = 0;
+
+// Function to update scores and display winner announcement
+function updateScoresAndAnnouncement(winner) {
+    if (winner === 'Player 1') {
+        player1Score++;
+        player1ScoreDisplay.textContent = player1Score;
+        winnerAnnouncement.textContent = 'Player 1 wins!';
+    } else if (winner === 'Player 2') {
+        player2Score++;
+        player2ScoreDisplay.textContent = player2Score;
+        winnerAnnouncement.textContent = 'Computer wins!';
+    } else {
+        winnerAnnouncement.textContent = "It's a tie!";
+    }
+}
+
+// Function to show the image and hide it after a certain amount of time
+function showImage(player1Choice, player2Choice, winner) {
+    const player1Image = document.createElement('img');
+    const player2Image = document.createElement('img');
+    const winnerImage = document.createElement('img');
+
+    // Set image sources based on player choices
+    player1Image.src = `./img/${player1Choice}.jpg`;
+    player2Image.src = `./img/${player2Choice}.jpg`;
+
+    // Determine the winning image source
+    let winnerSrc;
+    if (winner === 'Player 1') {
+        winnerSrc = `./img/Defeated ${player2Choice}.jpg`;
+    } else if (winner === 'Player 2') {
+        winnerSrc = `./img/Defeated ${player1Choice}.jpg`;
+    } else {
+        // If it's a tie, you can set a default tie image
+        winnerSrc = '';
+    }
+    winnerImage.src = winnerSrc;
+
+    // Set image classes for styling
+    player1Image.classList.add('player1-image');
+    player2Image.classList.add('player2-image');
+    winnerImage.classList.add('winner-image');
+
+    // Append player images to the image container
+    imageContainer.appendChild(player1Image);
+    imageContainer.appendChild(player2Image);
+
+    // Display the image container
+    imageContainer.style.display = 'flex';
+
+    // Hide the player images after a certain amount of time
+    setTimeout(function() {
+        // Remove player images from the container
+        imageContainer.removeChild(player1Image);
+        imageContainer.removeChild(player2Image);
+
+        // Set the winner image source and append it to the container
+        winnerImage.src = winnerSrc;
+        imageContainer.appendChild(winnerImage);
+    }, 2000); // Adjust the time (in milliseconds) as per your requirement
+
+    // Hide the image container after another certain amount of time
+    setTimeout(function() {
+        imageContainer.style.display = 'none';
+        // Remove the winner image from the container
+        imageContainer.removeChild(winnerImage);
+    }, 4000); // Adjust the time (in milliseconds) as per your requirement
+}
+
+// Function to determine the winner
+function determineWinner(player1Choice, player2Choice) {
+    if ((player1Choice === 'Rock' && player2Choice === 'Scissor') ||
+        (player1Choice === 'Paper' && player2Choice === 'Rock') ||
+        (player1Choice === 'Scissor' && player2Choice === 'Paper')) {
+        return 'Player 1';
+    } else if ((player2Choice === 'Rock' && player1Choice === 'Scissor') ||
+        (player2Choice === 'Paper' && player1Choice === 'Rock') ||
+        (player2Choice === 'Scissor' && player1Choice === 'Paper')) {
+        return 'Player 2';
+    } else {
+        return 'Tie';
+    }
+}
+
+// Function to get computer's choice
+function getComputerChoice() {
+    const choices = ['Rock', 'Paper', 'Scissor'];
+    const randomIndex = Math.floor(Math.random() * 3);
+    return choices[randomIndex];
+}
+
+// Event listeners for player choices
+rockButton.addEventListener('click', () => {
+    const player1Choice = 'Rock';
+    const player2Choice = getComputerChoice();
+    const winner = determineWinner(player1Choice, player2Choice);
+    updateScoresAndAnnouncement(winner);
+    player2ChoiceDisplay.textContent = `Computer chose ${player2Choice}`;
+    showImage(player1Choice, player2Choice, winner);
+});
+
+paperButton.addEventListener('click', () => {
+    const player1Choice = 'Paper';
+    const player2Choice = getComputerChoice();
+    const winner = determineWinner(player1Choice, player2Choice);
+    updateScoresAndAnnouncement(winner);
+    player2ChoiceDisplay.textContent = `Computer chose ${player2Choice}`;
+    showImage(player1Choice, player2Choice, winner);
+});
+
+scissorButton.addEventListener('click', () => {
+    const player1Choice = 'Scissor';
+    const player2Choice = getComputerChoice();
+    const winner = determineWinner(player1Choice, player2Choice);
+    updateScoresAndAnnouncement(winner);
+    player2ChoiceDisplay.textContent = `Computer chose ${player2Choice}`;
+    showImage(player1Choice, player2Choice, winner);
+});
+
+// Event listener for chat input
+chatInput.addEventListener('keypress', function(e) {
+    // Check if the Enter key is pressed
+    if (e.key === 'Enter') {
+        // Get the input value
+        const message = chatInput.value.trim();
+
+        // Clear the input field
+        chatInput.value = '';
+
+        // Display the message in the chat messages
+        if (message !== '') {
+            const messageElement = document.createElement('div');
+            messageElement.textContent = message;
+            chatMessages.appendChild(messageElement);
+            handleChat(); // Handle the chat after appending the message
+        }
+    }
+});
+
+const generateResponse = (userMessage) => {
+    const API_URL = "https://api.openai.com/v1/chat/completions";
+    // Define the properties and message for the API request
+    const requestOptions = {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${API_KEY}`
+        },
+        body: JSON.stringify({
+            model: "gpt-3.5-turbo",
+            messages: [
+                {
+                    role: "system",
+                    content: "You are a helpful assistant."
+                },
+                {
+                    role: "user",
+                    content: userMessage
+                }
+            ],
+        })
+    }
+    // Send POST request to API, get response and set the response as paragraph text
+    fetch(API_URL, requestOptions)
+        .then(res => res.json())
+        .then(data => {
+            const responseMessage = data.choices[0].message.content.trim();
+            const messageElement = document.createElement('div');
+            messageElement.textContent = responseMessage;
+            chatMessages.appendChild(messageElement);
+            chatMessages.scrollTo(0, chatMessages.scrollHeight); // Scroll to the bottom of chat messages
+        })
+        .catch(() => {
+            const errorMessageElement = document.createElement('div');
+            errorMessageElement.classList.add("error");
+            errorMessageElement.textContent = "Oops! Something went wrong. Please try again.";
+            chatMessages.appendChild(errorMessageElement);
+            chatMessages.scrollTo(0, chatMessages.scrollHeight); // Scroll to the bottom of chat messages
+        });
+}
+
+const handleChat = () => {
+    userMessage = chatMessages.lastElementChild.textContent; // Get the last chat message
+    generateResponse(userMessage); // Generate response based on the user's message
+}

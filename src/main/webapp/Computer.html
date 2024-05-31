@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.cdnfonts.com/css/arcade-classic" rel="stylesheet">
+    <style>
+        @import url('https://fonts.cdnfonts.com/css/arcade-classic');
+    </style>
+    <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="css/Game.css">
+</head>
+<body>
+<audio src="/Audio/ArcadeMusic.mp3" autoplay></audio>
+<div class="Container">
+    <div class="Title">
+        <h1>Rock Paper Scissors</h1>
+    </div>
+    <div class="Score">
+        <div class="Player1">
+            <div class="UserName">Player 1</div>
+            <div class="Score">0</div>
+        </div>
+        <div class="Player2">
+            <div class="Score">0</div>
+            <div class="UserName">Player 2</div>
+        </div>
+    </div>
+    <div class="Content">
+        <div class="Turn">Player's Turn</div>
+        <div class="Board">
+            <div class="Player2Choice">Player 2 is choosing</div>
+            <div id="imageContainer">
+                <!--Images will show up dynamically here -->
+            </div>
+            <div class="Player1Options">
+                <button type="button" class="Rock">Rock</button>
+                <button type="button" class="Paper">Paper</button>
+                <button type="button" class="Scissor">Scissor</button>
+            </div>
+            <div class="WinnerAnnouncement">Winner Announcement</div>
+        </div>
+        <div class="Chat">
+            <h2>Game Chat</h2>
+            <div class="ChatMessages">
+                <!-- Chat messages go here -->
+                <li class="chat incoming">
+                    <span class="material-symbols-outlined">Player 2</span>
+                    <p>Ive done 10000 calculations and in none of them, do you win.<br>Yet You Think You Can Defeat Me?</p>
+                </li>
+            </div>
+            <input type="text" class="ChatInput" placeholder="Type your message here">
+        </div>
+    </div>
+</div>
+
+<script>
+    // Read the player cookie to determine the player's choice
+    const playerCookie = document.cookie.split(';').find(cookie => cookie.trim().startsWith('player='));
+    if (playerCookie) {
+        const player = playerCookie.split('=')[1];
+        if (player === 'Player1') {
+            // Perform actions for Player 1
+            // For example, update UI to indicate Player 1
+        } else if (player === 'Player2') {
+            // Perform actions for Player 2
+            // For example, update UI to indicate Player 2
+        }
+    }
+</script>
+
+<script src="Computer.js"></script>
+</body>
+</html>
